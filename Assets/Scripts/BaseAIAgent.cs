@@ -13,12 +13,19 @@ public enum AgentStates {
     Dead
 }
 
+public enum AgentDirctions
+{
+    Forward, 
+    Backward
+}
+
 public class BaseAIAgent : MonoBehaviour
 {
     public Transform target; // The target to follow or retreat from
     protected NavMeshAgent agent;
 
     public AgentStates currentState = AgentStates.Idle;
+    public AgentDirctions currentDirection = AgentDirctions.Forward;
 
     public SplineContainer spline; // Reference to the SplineContainer script
     public float waypointSpacing = 1f; // Distance between waypoints
@@ -27,14 +34,27 @@ public class BaseAIAgent : MonoBehaviour
     protected List<Vector3> pathPoints = new List<Vector3>();
     protected int currentIndex = 0;
 
+    protected Animator animator;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         OnStart();
     }
 
     void Update()
     {
+        float speed = agent.velocity.magnitude;
+        animator?.SetFloat("Speed", speed);
+
+        // ? check if animator is null
+        //if (animator != null)
+        //{
+        //  /  animator.SetFloat("Speed", speed);
+        //}
+
+
         OnUpdate();
     }
 
@@ -70,14 +90,22 @@ public class BaseAIAgent : MonoBehaviour
         float splineLength = spline.Spline.GetLength();
         int pointCount = Mathf.CeilToInt(splineLength / waypointSpacing);
 
+        float closestDistance = float.MaxValue;
+
         for (int i = 0; i < pointCount; i++)
         {
             float t = i / (float)pointCount; // evenly distributed [0,1)
             Vector3 localPos = spline.Spline.EvaluatePosition(t);
             Vector3 worldPos = spline.transform.TransformPoint(localPos);
             pathPoints.Add(worldPos);
-            Debug.Log(worldPos);
 
+            // find the closest point on the spline to the agent's position
+            float dist = Vector3.Distance(worldPos, transform.position);
+            if (dist < closestDistance)
+            {
+                closestDistance = dist;
+                currentIndex = i; // Set the current index to the closest point
+            }
         }
     }
     protected void GoToNextPoint()
@@ -85,6 +113,20 @@ public class BaseAIAgent : MonoBehaviour
         if (pathPoints.Count == 0) return;
 
         agent.SetDestination(pathPoints[currentIndex]);
-        currentIndex = (currentIndex + 1) % pathPoints.Count; // loop back to start
+
+        if (currentDirection == AgentDirctions.Forward) {
+            currentIndex = (currentIndex + 1) % pathPoints.Count; // loop back to start
+        }
+        else
+        {
+            currentIndex = currentIndex - 1;
+            if (currentIndex < 0)
+            {
+                currentIndex = pathPoints.Count - 1; // loop back to end
+            }
+
+        }
+
+
     }
 }

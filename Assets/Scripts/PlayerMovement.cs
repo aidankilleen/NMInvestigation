@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed = 200f;
 
     private Rigidbody rb;
+    private Animator animator;
     public NavMeshSurface navMeshSurface;
 
 
@@ -17,7 +18,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
+        animator = GetComponent<Animator>();
+
 
     }
 
@@ -31,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
         float moveInput = Input.GetAxis("Vertical"); // Up/Down arrows
         Vector3 moveDirection = transform.forward * moveInput * moveSpeed;
         rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+
+        animator?.SetFloat("Speed", rb.velocity.magnitude);
 
 
     }
