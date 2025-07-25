@@ -22,13 +22,7 @@ public class AIAgentManager : MonoBehaviour
     void Start()
     {
         // create a FollowOrRetreat agent
-
-        FollowOrRetreatAIAgent forai = Instantiate<FollowOrRetreatAIAgent>(followOrRetreatPrefab,
-                                                                safePlaces[0].position,
-                                                                Quaternion.identity);
-        forai.target = target.transform;
-        forai.currentState = AgentStates.Chase;
-
+        SpawnFollowOrRetreat();
     }
 
     // Update is called once per frame
@@ -58,5 +52,29 @@ public class AIAgentManager : MonoBehaviour
         civilian.currentState = AgentStates.Patrol;
 
         agents.Add(civilian);
+    }
+
+    void SpawnFollowOrRetreat()
+    {
+        var safePlace = safePlaces[Random.Range(0, safePlaces.Count)];
+
+        FollowOrRetreatAIAgent forai = Instantiate<FollowOrRetreatAIAgent>(followOrRetreatPrefab,
+                                                        safePlaces[0].position,
+                                                        Quaternion.identity);
+        forai.target = target.transform;
+        forai.currentState = AgentStates.Chase;
+        forai.safePlace = safePlace;
+        agents.Add(forai);
+    }
+
+    public void ChangeChaseToFlee()
+    {
+        foreach (var agent in agents)
+        {
+            if (agent is FollowOrRetreatAIAgent)
+            {
+                agent.currentState = AgentStates.Flee;
+            }
+        }
     }
 }
