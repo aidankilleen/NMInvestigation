@@ -18,11 +18,16 @@ public class AIAgentManager : MonoBehaviour
 
     public List<Transform> safePlaces = new List<Transform>();
 
+
+    public int chaserCount = 4;
     // Start is called before the first frame update
     void Start()
     {
         // create a FollowOrRetreat agent
-        SpawnFollowOrRetreat();
+        for (int i=0; i<chaserCount; i++)
+        {
+            SpawnFollowOrRetreat();
+        }
     }
 
     // Update is called once per frame
@@ -56,10 +61,11 @@ public class AIAgentManager : MonoBehaviour
 
     void SpawnFollowOrRetreat()
     {
-        var safePlace = safePlaces[Random.Range(0, safePlaces.Count)];
+        int r = Random.Range(0, safePlaces.Count);
+        var safePlace = safePlaces[r];
 
         FollowOrRetreatAIAgent forai = Instantiate<FollowOrRetreatAIAgent>(followOrRetreatPrefab,
-                                                        safePlaces[0].position,
+                                                        safePlace.position,
                                                         Quaternion.identity);
         forai.target = target.transform;
         forai.currentState = AgentStates.Chase;
