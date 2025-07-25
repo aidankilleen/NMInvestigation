@@ -77,4 +77,15 @@ public class AIAgentManager : MonoBehaviour
             }
         }
     }
+    public void ToggleChaseOrFlee()
+    {
+        foreach (var agent in agents)
+        {
+            if (agent is FollowOrRetreatAIAgent)
+            {
+                agent.currentState = agent.currentState == AgentStates.Chase 
+                                    ? AgentStates.Flee : AgentStates.Chase;
+            }
+        }
+    }
 }

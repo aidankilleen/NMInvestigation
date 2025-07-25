@@ -29,7 +29,7 @@ public class ChangeChaseToFlee : MonoBehaviour
             {
                 Debug.Log("Player hit the trigger object");
 
-                agentManager.ChangeChaseToFlee();
+                agentManager.ToggleChaseOrFlee();
             }
         }
     }
