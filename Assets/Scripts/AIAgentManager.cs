@@ -37,6 +37,11 @@ public class AIAgentManager : MonoBehaviour
                 SpawnFollowOrRetreat();
             }
         }
+
+        if (patrolOrFollow)
+        {
+            SpawnPatrolOrFollow();
+        }
     }
 
     // Update is called once per frame
