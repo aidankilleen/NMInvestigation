@@ -6,6 +6,12 @@ using UnityEngine.Splines;
 public class AIAgentManager : MonoBehaviour
 {
 
+    public bool followOrRetreate = false;
+    public bool patrolOrFollow = true;
+
+    public PatrolOrFollowAIAgent patrolOrFollowPrefab;
+    public SplineContainer patrolOrFollowSpline;
+
     public List<BaseAIAgent> agents = new List<BaseAIAgent>();
     public CivilianAIAgent civilianPrefab;// = Resources.Load<CivilianAIAgent>("Prefabs/Civilian");
     public FollowOrRetreatAIAgent followOrRetreatPrefab;
@@ -24,9 +30,12 @@ public class AIAgentManager : MonoBehaviour
     void Start()
     {
         // create a FollowOrRetreat agent
-        for (int i=0; i<chaserCount; i++)
+        if (followOrRetreate)
         {
-            SpawnFollowOrRetreat();
+            for (int i=0; i<chaserCount; i++)
+            {
+                SpawnFollowOrRetreat();
+            }
         }
     }
 
@@ -72,6 +81,22 @@ public class AIAgentManager : MonoBehaviour
         forai.safePlace = safePlace;
         agents.Add(forai);
     }
+
+
+    void SpawnPatrolOrFollow()
+    {
+        PatrolOrFollowAIAgent pof = Instantiate<PatrolOrFollowAIAgent>(
+            patrolOrFollowPrefab, 
+            patrolOrFollowSpline.transform.position, 
+            Quaternion.identity
+            );
+        pof.target = target.transform;
+        pof.spline = patrolOrFollowSpline;
+        pof.currentState = AgentStates.Patrol;
+        agents.Add(pof);
+    }
+
+
 
     public void ChangeChaseToFlee()
     {

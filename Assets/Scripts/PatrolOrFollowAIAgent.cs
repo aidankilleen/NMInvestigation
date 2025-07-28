@@ -20,13 +20,24 @@ public class PatrolOrFollowAIAgent : BaseAIAgent
 
     protected override void OnUpdate()
     {
+
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+        if (distanceToTarget < followThreshold)
+        {
+            currentState = AgentStates.Chase;
+        } else
+        {
+            currentState = AgentStates.Patrol;
+        }
+
         if (currentState == AgentStates.Patrol)
         {
             if (!agent.pathPending && agent.remainingDistance < stopThreshold)
             {
                 GoToNextPoint();
             }
-            
+
 
         }
         else if (currentState == AgentStates.Chase)

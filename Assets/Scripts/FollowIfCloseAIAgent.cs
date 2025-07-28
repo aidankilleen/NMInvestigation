@@ -21,6 +21,8 @@ public class FollowIfCloseAIAgent : BaseAIAgent
 
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
+        Debug.Log($"{distanceToTarget}");
+
         if (distanceToTarget < followThreshold)
         {
             currentState = AgentStates.Chase; // Switch to Chase state if within threshold
