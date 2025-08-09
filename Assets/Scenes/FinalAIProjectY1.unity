@@ -2272,6 +2272,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5056a879f239f5349bb499da9c804a9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  followOrRetreate: 1
+  patrolOrFollow: 1
+  patrolOrFollowPrefab: {fileID: 2168610068828504386, guid: eaf047ff671ff0d479ad9df8f73f8a5f,
+    type: 3}
+  patrolOrFollowSpline: {fileID: 1482310445}
   agents: []
   civilianPrefab: {fileID: 8496297364898688451, guid: 277db1192e81d4e4987973a2ba9c92b1,
     type: 3}
